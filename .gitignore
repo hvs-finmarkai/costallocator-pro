@@ -5,7 +5,6 @@ dist/
 build/
 .env
 .env.local
-.env.production
 __pycache__/
 *.py[cod]
 *$py.class
