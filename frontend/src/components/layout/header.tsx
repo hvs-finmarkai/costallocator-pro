@@ -20,7 +20,7 @@ export function Header() {
   const { toggle } = useSidebarStore();
   const { user, logout } = useAuthStore();
 
-  const initials = user
+  const initials = user?.firstName && user?.lastName
     ? `${user.firstName[0]}${user.lastName[0]}`
     : "AK";
 
