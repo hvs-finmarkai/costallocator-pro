@@ -1,28 +1,27 @@
 "use client";
 
-import { Bell, Menu, Search } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Bell, Menu, Search, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { useSidebarStore, useAuthStore } from "@/store";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const { toggle } = useSidebarStore();
   const { user, logout } = useAuthStore();
+  const router = useRouter();
 
   const initials = user?.first_name && user?.last_name
     ? `${user.first_name[0]}${user.last_name[0]}`
     : "AK";
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-white dark:bg-slate-900 dark:border-slate-800 px-6">
@@ -44,7 +43,7 @@ export function Header() {
       </div>
 
       <div className="ml-auto flex items-center gap-3">
-        <div className="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm text-muted-foreground dark:border-slate-700">
+        <div className="hidden md:flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm text-muted-foreground dark:border-slate-700">
           <span className="font-medium">May 2025 (MTD)</span>
         </div>
 
@@ -57,34 +56,30 @@ export function Header() {
           </Badge>
         </Button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 outline-none cursor-pointer">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.avatar} />
-              <AvatarFallback className="bg-indigo-600 text-white text-xs">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            <div className="hidden md:block text-left">
-              <p className="text-sm font-medium">
-                {user ? `${user.first_name} ${user.last_name}` : "Arun Kumar"}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {user?.role?.replace("_", " ").toUpperCase() || "CFO"}
-              </p>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout} className="text-red-600">
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2 px-2">
+          <Avatar className="h-8 w-8">
+            <AvatarFallback className="bg-indigo-600 text-white text-xs">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+          <div className="hidden md:block text-left">
+            <p className="text-sm font-medium text-slate-900 dark:text-white">
+              {user ? `${user.first_name} ${user.last_name}` : "Arun Kumar"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {user?.role?.replace("_", " ").toUpperCase() || "CFO"}
+            </p>
+          </div>
+        </div>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleLogout}
+          className="text-muted-foreground hover:text-red-600"
+        >
+          <LogOut className="h-4 w-4" />
+        </Button>
       </div>
     </header>
   );
