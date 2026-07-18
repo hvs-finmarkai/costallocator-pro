@@ -49,10 +49,10 @@ const alerts = [
 
 export function AlertsSection() {
   return (
-    <Card className="p-5">
+    <Card className="p-5 dark:bg-slate-900 dark:border-slate-800">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-slate-900">Alerts</h3>
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Alerts</h3>
           <span className="text-xs text-muted-foreground">(18)</span>
         </div>
         <button className="text-xs text-indigo-600 font-medium hover:underline">

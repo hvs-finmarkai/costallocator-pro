@@ -23,10 +23,10 @@ const data = [
 
 export function RevenueTrendChart() {
   return (
-    <Card className="p-5">
+    <Card className="p-5 dark:bg-slate-900 dark:border-slate-800">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-slate-900">Revenue Trend</h3>
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Revenue Trend</h3>
           <span className="text-muted-foreground text-xs">ⓘ</span>
         </div>
         <select className="text-xs border rounded-md px-2 py-1 text-slate-600">

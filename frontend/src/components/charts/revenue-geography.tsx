@@ -13,9 +13,9 @@ const data = [
 
 export function RevenueByGeographyChart() {
   return (
-    <Card className="p-5">
+    <Card className="p-5 dark:bg-slate-900 dark:border-slate-800">
       <div className="flex items-center gap-2 mb-4">
-        <h3 className="text-sm font-semibold text-slate-900">Revenue by Geography</h3>
+        <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Revenue by Geography</h3>
         <span className="text-xs text-muted-foreground">(MTD)</span>
         <span className="text-muted-foreground text-xs">ⓘ</span>
       </div>
@@ -40,7 +40,7 @@ export function RevenueByGeographyChart() {
             </PieChart>
           </ResponsiveContainer>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <p className="text-xs font-bold text-slate-900">₹124.08 Cr</p>
+            <p className="text-xs font-bold text-slate-900 dark:text-white">₹124.08 Cr</p>
             <p className="text-[10px] text-muted-foreground">Total</p>
           </div>
         </div>
@@ -49,11 +49,11 @@ export function RevenueByGeographyChart() {
             <div key={item.name} className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-slate-600">{item.name}</span>
+                <span className="text-slate-600 dark:text-slate-300">{item.name}</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-slate-500">{item.value}%</span>
-                <span className="font-medium text-slate-900">₹{item.amount} Cr</span>
+                <span className="text-slate-500 dark:text-slate-400">{item.value}%</span>
+                <span className="font-medium text-slate-900 dark:text-white">₹{item.amount} Cr</span>
               </div>
             </div>
           ))}

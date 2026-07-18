@@ -28,10 +28,10 @@ interface AccountListProps {
 
 function AccountList({ title, subtitle, accounts, variant }: AccountListProps) {
   return (
-    <Card className="p-5">
+    <Card className="p-5 dark:bg-slate-900 dark:border-slate-800">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{title}</h3>
           <p className="text-xs text-muted-foreground">{subtitle}</p>
         </div>
         <button className="text-xs text-indigo-600 font-medium hover:underline">

@@ -43,10 +43,10 @@ const impactStyles = {
 
 export function AIInsightsSection() {
   return (
-    <Card className="p-5">
+    <Card className="p-5 dark:bg-slate-900 dark:border-slate-800">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-slate-900">AI Insights</h3>
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">AI Insights</h3>
           <span className="text-xs text-muted-foreground">(23 New)</span>
         </div>
         <button className="text-xs text-indigo-600 font-medium hover:underline">
@@ -55,13 +55,13 @@ export function AIInsightsSection() {
       </div>
       <div className="space-y-3">
         {insights.map((insight) => (
-          <div key={insight.id} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50">
+          <div key={insight.id} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
             <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg", insight.iconBg)}>
               <insight.icon className={cn("h-4 w-4", insight.iconColor)} />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
-                <h4 className="text-xs font-semibold text-slate-900">{insight.title}</h4>
+                <h4 className="text-xs font-semibold text-slate-900 dark:text-white">{insight.title}</h4>
                 <Badge variant="outline" className={cn("text-[10px] px-1.5 py-0", impactStyles[insight.impact])}>
                   {insight.impact === "high" ? "High Impact" : "Medium Impact"}
                 </Badge>

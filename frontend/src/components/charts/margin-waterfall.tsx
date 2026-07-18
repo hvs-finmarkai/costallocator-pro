@@ -24,9 +24,9 @@ const data = [
 
 export function MarginWaterfallChart() {
   return (
-    <Card className="p-5">
+    <Card className="p-5 dark:bg-slate-900 dark:border-slate-800">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-slate-900">Margin Waterfall (MTD)</h3>
+        <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Margin Waterfall (MTD)</h3>
       </div>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data} barSize={40}>

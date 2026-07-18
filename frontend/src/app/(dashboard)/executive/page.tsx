@@ -79,7 +79,7 @@ export default function ExecutiveDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Executive Dashboard</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Executive Dashboard</h1>
         <p className="text-sm text-muted-foreground">
           Welcome back, CFO! Here&apos;s your company performance overview.
         </p>
