@@ -1,1 +1,14 @@
-.vercel
+.env
+.env.local
+.env.production
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.vercel/

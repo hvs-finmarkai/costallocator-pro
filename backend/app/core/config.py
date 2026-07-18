@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from typing import Optional
 
 
 class Settings(BaseSettings):
@@ -7,12 +8,12 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     debug: bool = False
 
-    database_url: str = "postgresql://postgres:postgres@localhost:5432/costallocator"
-    redis_url: str = "redis://localhost:6379/0"
+    database_url: str
+    redis_url: Optional[str] = None
 
-    secret_key: str = "your-secret-key-change-in-production"
+    secret_key: str
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60
+    access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
     cors_origins: list[str] = ["http://localhost:3000"]
@@ -20,14 +21,6 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
-
-    @property
-    def database_url_with_ssl(self) -> str:
-        url = self.database_url
-        if "neon.tech" in url and "sslmode" not in url:
-            separator = "&" if "?" in url else "?"
-            url = f"{url}{separator}sslmode=require"
-        return url
 
 
 @lru_cache

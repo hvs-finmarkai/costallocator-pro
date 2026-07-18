@@ -1,15 +1,23 @@
-from fastapi import FastAPI, Request
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.api.v1 import api_router
 
 settings = get_settings()
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url="/docs" if settings.debug else None,
+    redoc_url="/redoc" if settings.debug else None,
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -19,25 +27,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-_db_initialized = False
-
-
-@app.middleware("http")
-async def ensure_db_tables(request: Request, call_next):
-    global _db_initialized
-    if not _db_initialized:
-        try:
-            from app.db.base import Base
-            from app.db.session import get_engine
-            from app.models import User, Organization, Role, Permission
-            engine = get_engine()
-            Base.metadata.create_all(bind=engine)
-            _db_initialized = True
-        except Exception:
-            pass
-    return await call_next(request)
-
 
 app.include_router(api_router)
 
@@ -52,6 +41,5 @@ async def root():
     return {
         "app": settings.app_name,
         "version": settings.app_version,
-        "docs": "/docs",
-        "health": "/health",
+        "status": "running",
     }
