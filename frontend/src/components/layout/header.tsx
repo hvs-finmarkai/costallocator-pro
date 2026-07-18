@@ -20,8 +20,8 @@ export function Header() {
   const { toggle } = useSidebarStore();
   const { user, logout } = useAuthStore();
 
-  const initials = user?.firstName && user?.lastName
-    ? `${user.firstName[0]}${user.lastName[0]}`
+  const initials = user?.first_name && user?.last_name
+    ? `${user.first_name[0]}${user.last_name[0]}`
     : "AK";
 
   return (
@@ -67,7 +67,7 @@ export function Header() {
             </Avatar>
             <div className="hidden md:block text-left">
               <p className="text-sm font-medium">
-                {user ? `${user.firstName} ${user.lastName}` : "Arun Kumar"}
+                {user ? `${user.first_name} ${user.last_name}` : "Arun Kumar"}
               </p>
               <p className="text-xs text-muted-foreground">
                 {user?.role?.replace("_", " ").toUpperCase() || "CFO"}

@@ -38,7 +38,7 @@ export default function LoginPage() {
     try {
       setError("");
       const response = await authService.login(data);
-      login(response.user, response.accessToken);
+      login(response.user, response.access_token);
       router.push("/executive");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");

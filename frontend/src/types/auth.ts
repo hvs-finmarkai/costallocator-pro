@@ -3,14 +3,14 @@ export type Role = "super_admin" | "cfo" | "coo" | "finance_controller" | "accou
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   role: Role;
   avatar?: string;
-  organizationId: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  organization_id: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Organization {
@@ -19,8 +19,8 @@ export interface Organization {
   logo?: string;
   domain: string;
   currency: string;
-  fiscalYearStart: number;
-  createdAt: string;
+  fiscal_year_start: number;
+  created_at: string;
 }
 
 export interface Permission {
@@ -33,9 +33,9 @@ export interface Permission {
 export interface RoleConfig {
   id: string;
   name: string;
-  displayName: string;
+  display_name: string;
   permissions: Permission[];
-  isSystem: boolean;
+  is_system: boolean;
 }
 
 export interface AuthState {
@@ -53,13 +53,13 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
-  organizationName: string;
+  first_name: string;
+  last_name: string;
+  organization_name: string;
 }
 
 export interface AuthResponse {
   user: User;
-  accessToken: string;
-  refreshToken: string;
+  access_token: string;
+  refresh_token: string;
 }

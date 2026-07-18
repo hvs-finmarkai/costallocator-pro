@@ -47,11 +47,11 @@ export default function RegisterPage() {
       const response = await authService.register({
         email: data.email,
         password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        organizationName: data.organizationName,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        organization_name: data.organizationName,
       });
-      login(response.user, response.accessToken);
+      login(response.user, response.access_token);
       router.push("/executive");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
