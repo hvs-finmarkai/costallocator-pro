@@ -3,11 +3,9 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 import bcrypt
 from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status, Request
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from app.core.config import get_settings
-from app.db.session import get_db
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -29,6 +27,7 @@ def hash_token(token: str) -> str:
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    from app.core.config import get_settings
     settings = get_settings()
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + (
@@ -39,6 +38,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
 
 def create_refresh_token(data: dict) -> str:
+    from app.core.config import get_settings
     settings = get_settings()
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(days=settings.refresh_token_expire_days)
@@ -47,6 +47,7 @@ def create_refresh_token(data: dict) -> str:
 
 
 def decode_token(token: str) -> dict:
+    from app.core.config import get_settings
     settings = get_settings()
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
@@ -59,9 +60,14 @@ def decode_token(token: str) -> dict:
         )
 
 
+def _get_db_dep():
+    from app.db.session import get_db
+    return get_db
+
+
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db),
+    db: Session = Depends(_get_db_dep()),
 ):
     from app.models.user import User
 
@@ -94,7 +100,7 @@ def require_roles(*allowed_roles: str):
         if current_user.role.value not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Role '{current_user.role.value}' does not have access to this resource",
+                detail=f"Role '{current_user.role.value}' does not have access",
             )
         return current_user
     return role_checker
@@ -104,6 +110,6 @@ def get_org_filter(current_user=Depends(get_current_user)):
     if not current_user.organization_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="User is not associated with any organization",
+            detail="User not associated with any organization",
         )
     return current_user.organization_id

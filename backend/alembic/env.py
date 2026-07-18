@@ -7,7 +7,11 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.db.base import Base
-from app.models import User, Organization, Role, Permission, AuditLog, RefreshToken
+from app.models.user import User
+from app.models.organization import Organization
+from app.models.role import Role, Permission
+from app.models.audit_log import AuditLog
+from app.models.refresh_token import RefreshToken
 
 config = context.config
 
@@ -30,8 +34,14 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+    from app.core.config import get_settings
+    settings = get_settings()
+
+    configuration = config.get_section(config.config_ini_section, {})
+    configuration["sqlalchemy.url"] = settings.database_url
+
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
