@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { ChevronDown, Zap } from "lucide-react";
+import { ChevronDown, TrendingUp as LogoIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navigationItems } from "@/config/navigation";
 import { useSidebarStore } from "@/store";
@@ -118,8 +118,8 @@ export function Sidebar() {
         "flex h-16 items-center gap-2 border-b border-slate-200 dark:border-slate-800 shrink-0",
         isCollapsed ? "justify-center px-2" : "px-4"
       )}>
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 shrink-0">
-          <Zap className="h-5 w-5 text-white" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 shrink-0">
+          <LogoIcon className="h-5 w-5 text-white" />
         </div>
         {!isCollapsed && (
           <div>

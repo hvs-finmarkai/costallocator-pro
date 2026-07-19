@@ -1,4 +1,4 @@
-import { Zap } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 
 export default function AuthLayout({
   children,
@@ -11,7 +11,7 @@ export default function AuthLayout({
         <div className="max-w-md text-center">
           <div className="flex items-center justify-center gap-3 mb-8">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600">
-              <Zap className="h-7 w-7 text-white" />
+              <TrendingUp className="h-7 w-7 text-white" />
             </div>
             <div className="text-left">
               <h1 className="text-2xl font-bold text-white">Finmark.ai</h1>
