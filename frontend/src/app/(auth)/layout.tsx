@@ -15,7 +15,7 @@ export default function AuthLayout({
             </div>
             <div className="text-left">
               <h1 className="text-2xl font-bold text-white">Finmark.ai</h1>
-              <p className="text-sm text-slate-400">P&L AutoTrack Suite</p>
+              <p className="text-sm text-slate-400">CostAllocator Pro</p>
             </div>
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">
