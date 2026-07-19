@@ -87,60 +87,507 @@
 
 ---
 
-## 4. TECH STACK
+## 4. END-TO-END ENTERPRISE WORKFLOW
 
-### 4.1 Frontend
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| Next.js | 16.2.10 | React Framework |
-| React | 19 | UI Library |
-| TypeScript | 5.x | Type Safety |
-| TailwindCSS | 4.x | Styling |
-| shadcn/ui | Latest | UI Components |
-| Zustand | Latest | State Management |
-| React Query | Latest | API Data Fetching |
-| React Hook Form | Latest | Form Handling |
-| Zod | Latest | Validation |
-| Recharts | Latest | Charts |
-| Lucide React | Latest | Icons |
-| next-themes | Latest | Dark/Light Mode |
-| Framer Motion | Latest | Animations |
+### Architecture Flow
 
-### 4.2 Backend
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| FastAPI | 0.115.0 | API Framework |
-| SQLAlchemy | 2.0.35 | ORM |
-| Alembic | 1.13.3 | Database Migrations |
-| Pydantic | 2.9.2 | Data Validation |
-| bcrypt | 4.0.1 | Password Hashing |
-| python-jose | 3.3.0 | JWT Tokens |
-| psycopg2-binary | 2.9.9 | PostgreSQL Driver |
-| uvicorn | 0.30.6 | ASGI Server |
-| redis | 5.1.1 | Caching (planned) |
-| httpx | 0.27.2 | HTTP Client |
+```
+                        EXTERNAL ENTERPRISE SYSTEMS
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ Salesforce │ SAP │ Tally │ HRMS │ Jira │ Timesheets │ CRM │ Outlook │ Teams │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                        1. DATA INGESTION LAYER
+═══════════════════════════════════════════════════════════════════════════════
+│ REST APIs │ Webhooks │ Scheduled Sync │ CSV Upload │ Manual Import │
 
-### 4.3 Database
-| Technology | Purpose |
-|-----------|---------|
-| PostgreSQL 17 (Neon) | Primary Database |
-| Redis (planned) | Caching & Queues |
+  Revenue           → Every 15 min
+  Projects          → Every 15 min
+  Employees         → Daily
+  Payroll           → Daily
+  Timesheets        → Hourly
+  Accounting        → Daily
+  Currency Rates    → Daily
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                    2. VALIDATION & TRANSFORMATION LAYER
+═══════════════════════════════════════════════════════════════════════════════
 
-### 4.4 Deployment
-| Service | Platform |
-|---------|----------|
-| Frontend | Vercel (Free) |
-| Backend | Render (Free) |
-| Database | Neon (Free) |
-| CI/CD | GitHub → Auto-deploy |
+  Validate:                          Transform:
+  ✓ Missing Values                   • Revenue
+  ✓ Duplicate Records                • Employee Cost
+  ✓ Invalid Currency                 • Vendor Cost
+  ✓ Invalid Project                  • Shared Cost
+  ✓ Employee Mapping                 • Project Cost
+  ✓ Client Mapping                   • Currency Conversion
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                         3. CENTRAL DATA PLATFORM
+═══════════════════════════════════════════════════════════════════════════════
+
+  Master Data:                       Transaction Data:
+  • Organization                     • Revenue
+  • Business Unit                    • Invoices
+  • Geography                        • Expenses
+  • Clients                          • Payroll
+  • Projects                         • Timesheets
+  • Employees                        • Utilization
+  • Skills                           • Allocations
+  • Cost Centers
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                      4. BUSINESS RULES ENGINE
+═══════════════════════════════════════════════════════════════════════════════
+
+  Finance Configures (NO Developer Required):
+  • Allocation Rules    • Budget Rules
+  • Margin Rules        • Alert Rules
+  • Currency Rules      • Pricing Rules
+  • Approval Rules
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                     5. P&L CALCULATION ENGINE
+═══════════════════════════════════════════════════════════════════════════════
+
+  Revenue → Direct Cost → Shared Cost → Gross Margin →
+  Contribution Margin → Net Margin → Budget Variance → Forecast
+
+  (Runs Automatically)
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                     6. WORKFORCE ENGINE
+═══════════════════════════════════════════════════════════════════════════════
+
+  Employee → Allocation % → Billable Hours → Cost →
+  Project Mapping → Utilization → Bench → Hiring Need
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                     7. COSTALLOCATOR PRO
+═══════════════════════════════════════════════════════════════════════════════
+
+  Shared Cost → Choose Driver (Headcount/Revenue/Space/Tickets/Hours) →
+  Weight → Allocate → Project Cost Updated → Margin Updated
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                     8. UNIT ECONOMICS ENGINE
+═══════════════════════════════════════════════════════════════════════════════
+
+  Calculate:
+  • Revenue per Employee      • Cost per Employee
+  • Revenue per Client        • Cost per Hour
+  • Revenue per Project       • Project Margin
+  • Client Margin             • BU Margin
+  • Geography Margin          • ROI
+  • Utilization               • Bench Burn
+  • Pricing
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                        9. AI INTELLIGENCE LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+  Forecast Engine → Margin Prediction → Revenue Prediction →
+  Cost Prediction → Pricing Advisor → Root Cause Analysis →
+  Executive Summary → Natural Language Answers
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                        10. ALERT ENGINE
+═══════════════════════════════════════════════════════════════════════════════
+
+  Margin < 15%    → Alert CFO
+  Revenue Drop    → Alert Finance
+  Bench > 20%     → Alert HR
+  Invoice Delay   → Alert Billing
+  Cost Overrun    → Alert PM
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                      11. DASHBOARD LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+  • Executive Dashboard       • Client Dashboard
+  • Company Dashboard         • Project Dashboard
+  • Business Unit Dashboard   • Employee Dashboard
+  • Geography Dashboard       • Forecast Dashboard
+                                      │
+                                      ▼
+═══════════════════════════════════════════════════════════════════════════════
+                        12. REPORTING LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+  PowerPoint │ PDF │ Excel │ Board Deck │ Investor Report │
+  Scheduled Email │ Monthly Pack │ AI Summary
+```
+
+
 
 ---
 
-## 5. PROJECT STRUCTURE
+## 5. TECHNOLOGY STACK (100% Free & Production-Ready)
+
+### 5.1 Frontend
+
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| Framework | Next.js 15 | SSR, SEO, Enterprise |
+| Language | TypeScript | Type safety |
+| Styling | Tailwind CSS | Fast development |
+| Components | shadcn/ui | Modern enterprise UI |
+| Data Grid | AG Grid Community | Enterprise tables |
+| Charts | Apache ECharts | Enterprise charts |
+| Icons | Lucide React | Lightweight |
+| State | Zustand | Simplicity |
+| API | React Query | API caching |
+| Forms | React Hook Form | Large forms |
+| Validation | Zod | Type-safe validation |
+
+### 5.2 Backend
+
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| API | FastAPI | High-performance API |
+| Authentication | FastAPI Users / Authlib | Auth management |
+| ORM | SQLAlchemy 2 | Database operations |
+| Validation | Pydantic | Data validation |
+| Background Jobs | Celery | Async processing |
+| Scheduler | APScheduler | Cron jobs |
+| Queue | Redis | Message broker |
+| File Upload | MinIO | Object storage |
+
+### 5.3 Database
+
+| Database | Purpose |
+|----------|---------|
+| PostgreSQL | Main database |
+| ClickHouse | Analytics & reports |
+| Redis | Cache & queue |
+| MinIO | Files (reports, exports) |
+
+### 5.4 AI Stack (100% Free)
+
+| Feature | Tool |
+|---------|------|
+| AI Framework | LangGraph |
+| Agents | LangChain |
+| Local LLM | Ollama |
+| Models | Llama 3 / Qwen / DeepSeek |
+| Forecast | Prophet |
+| ML | Scikit-learn |
+| Data Science | Pandas |
+| Numerical | NumPy |
+
+### 5.5 ETL & Integration
+
+| Tool | Purpose |
+|------|---------|
+| Airbyte | CRM/ERP connectors |
+| dbt Core | Data transformation |
+| Apache Airflow | Scheduling |
+| Pandas | Data cleaning |
+
+### 5.6 Reporting
+
+| Output | Tool |
+|--------|------|
+| Excel | ExcelJS |
+| PDF | PDFKit |
+| PowerPoint | PptxGenJS |
+| CSV | Native |
+
+### 5.7 Authentication
+
+| Tool | Purpose |
+|------|---------|
+| Keycloak | Enterprise SSO (primary) |
+| Clerk (free tier) | Alternative |
+
+### 5.8 Notifications
+
+| Channel | Tool |
+|---------|------|
+| Email | Resend (free tier) |
+| Slack | Webhooks |
+| Teams | Incoming Webhooks |
+| SMS | Twilio (trial) |
+| In-app | Novu |
+
+### 5.9 Monitoring
+
+| Tool | Purpose |
+|------|---------|
+| Grafana | Dashboards |
+| Prometheus | Metrics |
+| Loki | Logs |
+| Sentry | Error tracking |
+
+### 5.10 Deployment
+
+| Layer | Tool |
+|-------|------|
+| Frontend | Vercel |
+| Backend | Railway / Render / Fly.io |
+| Database | Neon PostgreSQL |
+| Redis | Upstash |
+| Storage | MinIO |
+| Reverse Proxy | Traefik |
+| CI/CD | GitHub Actions |
+| Containers | Docker |
+
+---
+
+## 6. DEVELOPMENT ROADMAP
+
+### Phase 1 – Foundation (Week 1–2) ✅ COMPLETE
+
+**Build:** Authentication, Organizations, Roles, Permissions, User Management, Settings, Audit Logs
+
+**Tools:** FastAPI, Keycloak, PostgreSQL, Next.js, Tailwind, shadcn/ui
+
+### Phase 2 – Data Integration (Week 2–3)
+
+**Build:** CRM Connector, SAP Connector, HRMS Connector, Jira Connector, Timesheet Connector, CSV Import, Scheduler
+
+**Tools:** Airbyte, FastAPI, APScheduler, Pandas
+
+### Phase 3 – Data Warehouse (Week 3)
+
+**Build:** Master Data, Transactions, Validation, Currency Conversion, Audit Trail
+
+**Tools:** PostgreSQL, ClickHouse, SQLAlchemy, Alembic
+
+### Phase 4 – P&L Engine (Week 4)
+
+**Build:** Revenue Engine, Expense Engine, Margin Engine, Budget vs Actual, Revenue Recognition
+
+**Tools:** FastAPI, SQLAlchemy, Celery
+
+### Phase 5 – Workforce Engine (Week 5)
+
+**Build:** Employee Allocation, Utilization, Bench Monitoring, Skill Matrix, Hiring Forecast
+
+**Tools:** FastAPI, PostgreSQL, Apache ECharts
+
+### Phase 6 – CostAllocator Pro (Week 6)
+
+**Build:** Cost Centers, Allocation Rules, Driver Engine, Scenario Modeling, Pricing Advisor, Historical Trends
+
+**Tools:** PostgreSQL, React Flow, Apache ECharts
+
+### Phase 7 – Unit Economics Engine (Week 7)
+
+**Build:** Revenue per Employee, Cost per Employee, Revenue per Client, Project Profitability, Client Profitability, BU Profitability, Geography Profitability
+
+**Tools:** Pandas, SQLAlchemy, PostgreSQL
+
+### Phase 8 – AI Layer (Week 8–9)
+
+**Build:** Revenue Forecast, Margin Forecast, Pricing Advisor, Bench Recommendation, Executive Summary, AI Copilot
+
+**Tools:** Ollama, LangGraph, LangChain, Prophet, Scikit-learn, Llama 3, DeepSeek
+
+### Phase 9 – Dashboards (Week 10)
+
+**Build:** Executive Dashboard, Geography Dashboard, BU Dashboard, Client Dashboard, Project Dashboard, Heatmaps, Forecast Dashboard
+
+**Tools:** Apache ECharts, AG Grid Community, Next.js
+
+### Phase 10 – Reports (Week 11)
+
+**Build:** PDF Reports, Excel Reports, PowerPoint Reports, Scheduled Reports, Email Delivery
+
+**Tools:** PDFKit, ExcelJS, PptxGenJS, Resend
+
+### Phase 11 – Production Hardening (Week 12)
+
+**Build:** Docker Images, CI/CD, Monitoring, Logging, Backups, Security Hardening, Performance Optimization
+
+**Tools:** Docker, GitHub Actions, Traefik, Grafana, Prometheus, Loki, Sentry
+
+---
+
+## 7. DETAILED BUSINESS WORKFLOW
+
+### Phase 1 – Data Collection
+
+| Source | Data |
+|--------|------|
+| Salesforce | Revenue |
+| SAP | Expenses |
+| HRMS | Employees |
+| Jira | Projects |
+| Timesheets | Hours Worked |
+
+### Phase 2 – Data Mapping
+
+Every entity is mapped automatically:
+
+```
+Employee → Project → Client → Business Unit → Geography → Organization
+```
+
+**Example:** John → Project Alpha → Microsoft → Retail BU → India → Finmark.ai
+
+Now every rupee earned and spent can be traced.
+
+### Phase 3 – Cost Allocation
+
+| Cost Type | Driver | Flow |
+|-----------|--------|------|
+| HR Cost | Headcount | HR Cost → Headcount → Projects → Clients → Margin Updated |
+| IT Cost | Tickets Raised | IT Cost → Tickets → Allocate → Project Cost |
+| Facilities | Office Space | Rent → Space Used → Allocate → Projects |
+
+### Phase 4 – P&L Generation
+
+For every project:
+
+```
+Revenue (₹12 Cr) → Employee Cost (₹5 Cr) → Vendor Cost (₹2 Cr) →
+Allocated Cost (₹1 Cr) → Gross Margin (₹5 Cr) → Net Margin (₹4 Cr)
+```
+
+### Phase 5 – Unit Economics
+
+The platform generates:
+- Revenue per Employee
+- Revenue per Billable Hour
+- Cost per Employee
+- Cost per Client
+- Client Profitability
+- Project Profitability
+- ROI
+- Contribution Margin
+- Gross Margin
+- Net Margin
+
+### Phase 6 – AI Decision Engine
+
+AI continuously checks:
+
+```
+Margin Falling? → YES → Why? → Revenue / Cost / Bench → Recommendation
+```
+
+**Example:**
+```
+Microsoft Margin: 18% → 13%
+Reason: High Overtime
+Recommendation: Move 3 Engineers
+Expected Margin: 16%
+```
+
+### Phase 7 – Executive Reporting
+
+One click produces:
+
+```
+Executive Summary → Charts → KPIs → Top Risks →
+Recommendations → PowerPoint → Email to Board
+```
+
+---
+
+## 8. USER JOURNEY
+
+```
+Login → Executive Dashboard
+  ├── Company Health
+  ├── Revenue
+  ├── Margin
+  ├── AI Insights
+  │
+  ▼
+Choose Client → Client Dashboard
+  ├── Revenue
+  ├── Costs
+  ├── Profitability
+  ├── Projects
+  │
+  ▼
+Open Project → Project Economics
+  ├── Revenue
+  ├── Workforce
+  ├── Shared Cost
+  ├── AI Suggestions
+  │
+  ▼
+Run Scenario → "What happens if we move 10 employees?"
+  │
+  ▼
+Updated Margin & Forecast
+  │
+  ▼
+Generate Report → Export to PPT / PDF / Excel
+```
+
+---
+
+## 9. PRODUCTION ARCHITECTURE
+
+```
+User
+   │
+   ▼
+Next.js (Vercel)
+   │
+   ▼
+FastAPI (Railway/Render/Fly.io)
+   │
+   ├── Authentication (Keycloak)
+   ├── Business Logic
+   ├── P&L Engine
+   ├── Workforce Engine
+   ├── CostAllocator Pro
+   ├── Unit Economics Engine
+   ├── AI Services
+   ├── Report Engine
+   └── Notification Service
+   │
+   ▼
+PostgreSQL + ClickHouse + Redis + MinIO
+   │
+   ▼
+Airbyte + Airflow + External Systems
+   │
+   ▼
+SAP / Salesforce / Tally / Jira / HRMS / Timesheets
+```
+
+---
+
+## 10. ESTIMATED SCOPE
+
+| Category | Count |
+|----------|-------|
+| Frontend pages | 70–80 |
+| Reusable React components | 300+ |
+| Backend APIs | ~220 |
+| Database tables | 50–60 |
+| AI agents | 6–8 |
+| Background jobs | 20+ |
+| External integrations | 10–15 |
+| Reports | 15+ |
+| Dashboards | 10+ |
+
+
+
+---
+
+## 11. CURRENT PROJECT STRUCTURE
 
 ```
 costallocator-pro/
-├── frontend/                    # Next.js 16 Application
+├── frontend/
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── (auth)/
@@ -151,36 +598,16 @@ costallocator-pro/
 │   │   │   ├── (dashboard)/
 │   │   │   │   ├── executive/page.tsx
 │   │   │   │   ├── pnl/
-│   │   │   │   │   ├── page.tsx
-│   │   │   │   │   ├── revenue/page.tsx
-│   │   │   │   │   ├── costs/page.tsx
-│   │   │   │   │   └── margins/page.tsx
 │   │   │   │   ├── allocation/
-│   │   │   │   │   ├── page.tsx
-│   │   │   │   │   ├── cost-centers/page.tsx
-│   │   │   │   │   ├── rules/page.tsx
-│   │   │   │   │   ├── simulation/page.tsx
-│   │   │   │   │   └── pricing/page.tsx
 │   │   │   │   ├── forecast/
-│   │   │   │   │   ├── page.tsx
-│   │   │   │   │   └── ai/page.tsx
 │   │   │   │   ├── alerts/page.tsx
 │   │   │   │   ├── reports/page.tsx
 │   │   │   │   ├── admin/
-│   │   │   │   │   ├── page.tsx
-│   │   │   │   │   ├── users/page.tsx
-│   │   │   │   │   ├── roles/page.tsx
-│   │   │   │   │   ├── audit/page.tsx
-│   │   │   │   │   └── settings/page.tsx
 │   │   │   │   └── layout.tsx
 │   │   │   ├── globals.css
 │   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
 │   │   ├── components/
-│   │   │   ├── charts/
-│   │   │   ├── layout/
-│   │   │   ├── shared/
-│   │   │   └── ui/
 │   │   ├── config/
 │   │   ├── hooks/
 │   │   ├── services/
@@ -190,54 +617,18 @@ costallocator-pro/
 │   ├── package.json
 │   └── vercel.json
 │
-├── backend/                     # FastAPI Application
+├── backend/
 │   ├── app/
-│   │   ├── api/
-│   │   │   └── v1/
-│   │   │       ├── endpoints/
-│   │   │       │   ├── auth.py
-│   │   │       │   ├── users.py
-│   │   │       │   ├── revenues.py
-│   │   │       │   ├── expenses.py
-│   │   │       │   └── pnl.py
-│   │   │       └── __init__.py
+│   │   ├── api/v1/endpoints/
 │   │   ├── core/
-│   │   │   ├── config.py
-│   │   │   └── security.py
 │   │   ├── db/
-│   │   │   ├── base.py
-│   │   │   └── session.py
 │   │   ├── models/
-│   │   │   ├── user.py
-│   │   │   ├── organization.py
-│   │   │   ├── role.py
-│   │   │   ├── revenue.py
-│   │   │   ├── expense.py
-│   │   │   ├── cost_center.py
-│   │   │   ├── budget.py
-│   │   │   ├── exchange_rate.py
-│   │   │   ├── audit_log.py
-│   │   │   └── refresh_token.py
 │   │   ├── schemas/
-│   │   │   ├── auth.py
-│   │   │   ├── user.py
-│   │   │   ├── revenue.py
-│   │   │   ├── expense.py
-│   │   │   └── pnl.py
 │   │   ├── services/
-│   │   │   └── audit.py
 │   │   └── main.py
 │   ├── alembic/
-│   │   ├── versions/
-│   │   │   ├── 001_initial_schema.py
-│   │   │   └── 002_add_pnl_tables.py
-│   │   └── env.py
-│   ├── migrate.py
-│   ├── Procfile
 │   ├── requirements.txt
-│   ├── runtime.txt
-│   ├── Dockerfile
-│   └── .env.example
+│   └── Dockerfile
 │
 ├── docker-compose.yml
 ├── render.yaml
@@ -247,9 +638,10 @@ costallocator-pro/
 
 ---
 
-## 6. DATABASE SCHEMA
+## 12. DATABASE SCHEMA
 
-### 6.1 Existing Tables
+### Existing Tables
+
 | Table | Description |
 |-------|-------------|
 | organizations | Company/tenant data |
@@ -265,133 +657,56 @@ costallocator-pro/
 | budgets | Budget allocations |
 | exchange_rates | Currency conversion rates |
 
-### 6.2 Users Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| email | VARCHAR(255) | Unique, indexed |
-| hashed_password | VARCHAR(255) | bcrypt hash |
-| first_name | VARCHAR(100) | |
-| last_name | VARCHAR(100) | |
-| role | ENUM | super_admin, cfo, coo, finance_controller, account_manager, hr, operations, viewer |
-| avatar | VARCHAR(500) | Profile image URL |
-| is_active | BOOLEAN | Account status |
-| organization_id | UUID | FK → organizations |
-| created_at | TIMESTAMP | Auto |
-| updated_at | TIMESTAMP | Auto |
-
-### 6.3 Revenues Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| organization_id | UUID | FK → organizations |
-| client_name | VARCHAR(255) | |
-| project_name | VARCHAR(255) | |
-| business_unit | VARCHAR(100) | |
-| geography | VARCHAR(100) | |
-| revenue_type | ENUM | recurring, one_time, project_based, milestone, time_material |
-| status | ENUM | draft, recognized, deferred, invoiced, collected |
-| amount | NUMERIC(15,2) | |
-| currency | VARCHAR(10) | Default: INR |
-| amount_inr | NUMERIC(15,2) | Converted amount |
-| period_start | DATE | |
-| period_end | DATE | |
-| invoice_number | VARCHAR(100) | |
-| description | TEXT | |
-| source | VARCHAR(50) | manual, sap, salesforce, etc. |
-
-### 6.4 Expenses Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| organization_id | UUID | FK → organizations |
-| cost_center_id | UUID | FK → cost_centers |
-| client_name | VARCHAR(255) | |
-| project_name | VARCHAR(255) | |
-| business_unit | VARCHAR(100) | |
-| category | ENUM | employee, vendor, infrastructure, travel, software, marketing, operational, overhead, other |
-| expense_type | ENUM | direct, indirect, shared |
-| description | TEXT | |
-| amount | NUMERIC(15,2) | |
-| currency | VARCHAR(10) | |
-| amount_inr | NUMERIC(15,2) | |
-| period | DATE | |
-| vendor_name | VARCHAR(255) | |
-| is_recurring | BOOLEAN | |
-| source | VARCHAR(50) | |
-
-### 6.5 Audit Logs Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| user_id | UUID | FK → users |
-| organization_id | UUID | FK → organizations |
-| action | VARCHAR(50) | login, create, update, delete, export |
-| resource | VARCHAR(100) | auth, user, revenue, expense, etc. |
-| resource_id | VARCHAR(255) | ID of affected record |
-| details | JSONB | Additional context |
-| ip_address | VARCHAR(45) | Client IP |
-| user_agent | TEXT | Browser info |
-| created_at | TIMESTAMP | |
-
 ---
 
-## 7. API ENDPOINTS
+## 13. API ENDPOINTS
 
-### 7.1 Authentication
+### Authentication
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | /api/v1/auth/login | Login with email/password |
-| POST | /api/v1/auth/register | Register new organization |
-| GET | /api/v1/auth/me | Get current user |
-| POST | /api/v1/auth/refresh | Refresh access token |
-| POST | /api/v1/auth/logout | Revoke all sessions |
-| POST | /api/v1/auth/forgot-password | Request password reset |
+| POST | /api/v1/auth/login | Login |
+| POST | /api/v1/auth/register | Register |
+| GET | /api/v1/auth/me | Current user |
+| POST | /api/v1/auth/refresh | Refresh token |
+| POST | /api/v1/auth/logout | Logout |
+| POST | /api/v1/auth/forgot-password | Password reset |
 
-### 7.2 Users
+### Users
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/users | List users (with search, pagination) |
-| POST | /api/v1/users | Create user (admin only) |
-| GET | /api/v1/users/{id} | Get user details |
+| GET | /api/v1/users | List users |
+| POST | /api/v1/users | Create user |
+| GET | /api/v1/users/{id} | Get user |
 | PATCH | /api/v1/users/{id} | Update user |
-| DELETE | /api/v1/users/{id} | Delete user (admin only) |
+| DELETE | /api/v1/users/{id} | Delete user |
 
-### 7.3 Revenue
+### Revenue
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/revenues | List revenues (with filters) |
-| POST | /api/v1/revenues | Create revenue entry |
-| GET | /api/v1/revenues/stats | Revenue statistics |
-| GET | /api/v1/revenues/{id} | Get revenue details |
+| GET | /api/v1/revenues | List revenues |
+| POST | /api/v1/revenues | Create revenue |
+| GET | /api/v1/revenues/stats | Revenue stats |
 | PATCH | /api/v1/revenues/{id} | Update revenue |
 | DELETE | /api/v1/revenues/{id} | Delete revenue |
 
-### 7.4 Expenses
+### Expenses
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/expenses | List expenses (with filters) |
-| POST | /api/v1/expenses | Create expense entry |
-| GET | /api/v1/expenses/stats | Expense statistics |
-| GET | /api/v1/expenses/{id} | Get expense details |
+| GET | /api/v1/expenses | List expenses |
+| POST | /api/v1/expenses | Create expense |
+| GET | /api/v1/expenses/stats | Expense stats |
 | PATCH | /api/v1/expenses/{id} | Update expense |
 | DELETE | /api/v1/expenses/{id} | Delete expense |
 
-### 7.5 P&L
+### P&L
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/pnl/summary | Full P&L summary (gross/contribution/net margin) |
-| GET | /api/v1/pnl/margin-trend | Monthly margin trend |
-
-### 7.6 Health
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /health | Service health check |
-| GET | / | Service info |
+| GET | /api/v1/pnl/summary | P&L summary |
+| GET | /api/v1/pnl/margin-trend | Margin trend |
 
 ---
 
-## 8. FRONTEND PAGES (22 Pages)
+## 14. FRONTEND PAGES (22 Pages)
 
 | # | Page | Route | Status |
 |---|------|-------|--------|
@@ -420,7 +735,7 @@ costallocator-pro/
 
 ---
 
-## 9. SECURITY FEATURES
+## 15. SECURITY FEATURES
 
 | Feature | Status |
 |---------|--------|
@@ -437,160 +752,55 @@ costallocator-pro/
 
 ---
 
-## 10. GIT COMMITS HISTORY
+## 16. HOW TO RUN LOCALLY
 
-```
-6affd70 fix: sidebar now responds to theme toggle
-bac5cc3 fix: dark mode theme toggle not working
-73b0b68 fix: force black font color on all input fields
-194fa36 fix: input text color - black in light mode, white in dark mode
-c66302d fix: sidebar collapsed state - show only icons, proper alignment
-dc36155 feat: make Admin Users page fully functional (Add + Delete)
-0acd716 fix: remove DropdownMenu from Header to fix Base UI error #31
-a989f63 fix: fix navigation links and add all missing pages
-f8f9313 fix: align frontend types with backend snake_case API response
-221882a fix: handle null user state in Header and AuthGuard hydration
-df4b1c8 fix: add frontend .env.production file (Render API URL)
-2243a2f fix: include .env.production with Render API URL for build-time env
-fdba457 feat: add auth guard - redirect to login if not authenticated
-2ca7877 fix: use create_all(checkfirst=True) instead of alembic for deploy
-84a082d feat: add CostAllocator, Alerts, and Admin pages
-9337347 fix: stamp migration 001 before upgrade to handle existing tables
-24edc8e feat: add P&L frontend pages (Revenue, Costs, Margins)
-47429ce feat: add Module 1 - P&L AutoTrack Core (Revenue, Cost, Margin engines)
-106760a fix: use alembic stamp head for existing DB tables
-64ec262 fix: add DATABASE_URL directly in render.yaml
-be89ffb fix: resolve circular import in backend startup
-bee6515 refactor: harden backend for enterprise production on Render
-577bf1e feat: add dark/light theme toggle with next-themes
-ac3ce51 fix: resolve Vercel serverless deployment issues
-70a519e feat: add deployment configs for Vercel + Render
-f5b0f39 feat: initialize CostAllocator Pro - Phase 1 infrastructure
-```
-
----
-
-## 11. HOW TO RUN LOCALLY
-
-### 11.1 Frontend
+### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
-# Opens at http://localhost:3000
 ```
 
-### 11.2 Backend
+### Backend
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate        # Windows
+venv\Scripts\activate
 pip install -r requirements.txt
-# Create .env file with DATABASE_URL and SECRET_KEY
 uvicorn app.main:app --reload
-# Opens at http://localhost:8000
 ```
 
-### 11.3 Database (Docker)
+### Database (Docker)
 ```bash
 docker-compose up -d
-# PostgreSQL at localhost:5432
-# Redis at localhost:6379
 ```
 
 ---
 
-## 12. DEPLOYMENT PROCESS
+## 17. DEPLOYMENT PROCESS
 
 ### Frontend (Vercel)
 1. Push to GitHub master branch
 2. Run: `cd frontend && npx vercel --yes --prod`
-3. Auto-deploys at costallocator-pro.vercel.app
 
 ### Backend (Render)
 1. Push to GitHub master branch
 2. Render auto-deploys from GitHub
-3. Build command: `pip install -r requirements.txt && python migrate.py`
-4. Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+3. Build: `pip install -r requirements.txt && python migrate.py`
+4. Start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 
 ---
 
-## 13. WHAT'S BUILT vs WHAT'S REMAINING
-
-### Built (Phase 1) — ~40%
-- ✅ Authentication (Login, Register, JWT, Refresh, Logout)
-- ✅ RBAC (Roles, Permissions, Enforcement)
-- ✅ Organization Isolation (Multi-tenant)
-- ✅ Audit Logging
-- ✅ User Management (CRUD)
-- ✅ Executive Dashboard (UI)
-- ✅ P&L Management (Revenue, Costs, Margins pages)
-- ✅ CostAllocator Pro (Cost Centers, Rules, Simulation, Pricing pages)
-- ✅ Alerts, Reports, Forecast pages
-- ✅ Dark/Light Theme Toggle
-- ✅ Revenue & Expense APIs (CRUD + Stats)
-- ✅ P&L Summary & Margin Trend APIs
-
-### Remaining (Phases 2-6) — ~60%
-- ❌ Revenue Recognition Engine
-- ❌ Workforce/Employee Management
-- ❌ Cost Allocation Engine (actual calculations)
-- ❌ Forecast/AI Predictions
-- ❌ Background Jobs (Celery)
-- ❌ Email Notifications
-- ❌ Report Generation (PowerPoint, PDF, Excel)
-- ❌ SAP/Salesforce/Tally Integration
-- ❌ WebSocket Real-time Updates
-- ❌ Data Import (CSV Upload)
-- ❌ Multi-Factor Authentication
-- ❌ SSO (Google, Microsoft, Azure AD)
-- ❌ Monitoring (Grafana, Sentry)
-- ❌ CI/CD Pipeline (GitHub Actions)
-
----
-
-## 14. ARCHITECTURE DIAGRAM
-
-```
-Users (CFO, Finance, Operations)
-         │
-         ▼
-┌─────────────────────────┐
-│  Vercel (Frontend)      │
-│  Next.js 16 + React 19  │
-│  costallocator-pro.     │
-│  vercel.app             │
-└───────────┬─────────────┘
-            │ HTTPS
-            ▼
-┌─────────────────────────┐
-│  Render (Backend)       │
-│  FastAPI + SQLAlchemy   │
-│  costallocator-api-     │
-│  3skb.onrender.com      │
-└───────────┬─────────────┘
-            │ SSL
-            ▼
-┌─────────────────────────┐
-│  Neon (Database)        │
-│  PostgreSQL 17          │
-│  ap-southeast-1         │
-└─────────────────────────┘
-```
-
----
-
-## 15. CONTACT & OWNERSHIP
+## 18. CONTACT & OWNERSHIP
 
 | Field | Value |
 |-------|-------|
 | Organization | Finmark.ai |
-| Partner | — |
 | Neon Account | harsh.singh@finmark.ai |
 | GitHub Org | hvs-finmarkai |
 
 ---
 
-**Document Generated:** July 19, 2026  
-**Version:** 1.0.0  
+**Document Updated:** July 19, 2026  
+**Version:** 2.0.0  
 **Classification:** Internal/Confidential
