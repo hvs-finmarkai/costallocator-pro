@@ -54,4 +54,4 @@ uvicorn app.main:app --reload
 
 ## Brand
 
-Finmark.ai × Denave
+Finmark.ai

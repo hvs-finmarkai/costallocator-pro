@@ -15,7 +15,7 @@ export default function SettingsPage() {
       <Card className="p-6 dark:bg-slate-900 dark:border-slate-800 max-w-2xl space-y-4">
         <div className="space-y-2">
           <Label>Organization Name</Label>
-          <Input defaultValue="Denave" />
+          <Input defaultValue="" />
         </div>
         <div className="space-y-2">
           <Label>Currency</Label>

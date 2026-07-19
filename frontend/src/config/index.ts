@@ -1,7 +1,7 @@
 export const APP_CONFIG = {
   name: "CostAllocator Pro",
   brand: "Finmark.ai",
-  partner: "Denave",
+  partner: "",
   description: "Enterprise Financial Intelligence Platform",
   version: "1.0.0",
 } as const;

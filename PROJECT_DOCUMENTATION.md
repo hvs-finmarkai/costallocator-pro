@@ -1,12 +1,12 @@
 # CostAllocator Pro - Complete Project Documentation
-## Finmark.ai × Denave | P&L AutoTrack Suite
+## Finmark.ai | CostAllocator Pro
 
 ---
 
 ## 1. PROJECT OVERVIEW
 
 **Project Name:** CostAllocator Pro  
-**Brand:** Finmark.ai × Denave  
+**Brand:** Finmark.ai  
 **Type:** Enterprise Financial Intelligence Platform  
 **Status:** Live (Phase 1 Complete)  
 **Version:** 1.0.0  
@@ -585,7 +585,7 @@ Users (CFO, Finance, Operations)
 | Field | Value |
 |-------|-------|
 | Organization | Finmark.ai |
-| Partner | Denave |
+| Partner | — |
 | Neon Account | harsh.singh@finmark.ai |
 | GitHub Org | hvs-finmarkai |
 

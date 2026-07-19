@@ -39,7 +39,7 @@ export default function AuthLayout({
             ))}
           </div>
           <div className="mt-12 pt-8 border-t border-white/10">
-            <p className="text-xs text-slate-500">Finmark.ai × Denave</p>
+            <p className="text-xs text-slate-500">Finmark.ai</p>
             <p className="text-xs text-slate-600">© 2025 All rights reserved</p>
           </div>
         </div>

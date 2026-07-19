@@ -141,7 +141,7 @@ export function Sidebar() {
       <div className="border-t border-slate-200 dark:border-slate-800 p-4 shrink-0">
         {!isCollapsed && (
           <div className="text-xs text-slate-400 dark:text-slate-500">
-            <p className="font-medium text-slate-500 dark:text-slate-400">Finmark.ai × Denave</p>
+            <p className="font-medium text-slate-500 dark:text-slate-400">Finmark.ai</p>
             <p>© 2025 All rights reserved</p>
           </div>
         )}
