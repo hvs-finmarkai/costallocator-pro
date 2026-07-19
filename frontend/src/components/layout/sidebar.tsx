@@ -124,7 +124,7 @@ export function Sidebar() {
         {!isCollapsed && (
           <div>
             <h1 className="text-sm font-bold text-slate-900 dark:text-white">Finmark.ai</h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">CostAllocator Pro</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">UnitEcon Tracker</p>
           </div>
         )}
       </div>

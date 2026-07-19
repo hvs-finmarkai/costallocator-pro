@@ -15,11 +15,11 @@ export default function AuthLayout({
             </div>
             <div className="text-left">
               <h1 className="text-2xl font-bold text-white">Finmark.ai</h1>
-              <p className="text-sm text-slate-400">CostAllocator Pro</p>
+              <p className="text-sm text-slate-400">UnitEcon Tracker</p>
             </div>
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">
-            CostAllocator Pro
+            UnitEcon Tracker
           </h2>
           <p className="text-slate-300 text-lg mb-6">
             Enterprise Financial Intelligence Platform
