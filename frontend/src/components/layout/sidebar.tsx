@@ -10,13 +10,30 @@ import { useSidebarStore } from "@/store";
 import { Badge } from "@/components/ui/badge";
 import type { NavItem } from "@/types";
 
-function NavItemComponent({ item, depth = 0 }: { item: NavItem; depth?: number }) {
+function NavItemComponent({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(
     item.children?.some((child) => pathname.startsWith(child.href)) || false
   );
   const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
   const hasChildren = item.children && item.children.length > 0;
+
+  if (collapsed) {
+    return (
+      <Link
+        href={item.href}
+        className={cn(
+          "flex h-10 w-10 items-center justify-center rounded-lg mx-auto transition-colors",
+          isActive
+            ? "bg-indigo-600 text-white"
+            : "text-slate-300 hover:bg-white/10 hover:text-white"
+        )}
+        title={item.title}
+      >
+        <item.icon className="h-5 w-5" />
+      </Link>
+    );
+  }
 
   if (hasChildren) {
     return (
@@ -44,7 +61,18 @@ function NavItemComponent({ item, depth = 0 }: { item: NavItem; depth?: number }
         {isOpen && (
           <div className="mt-1 ml-4 space-y-1 border-l border-white/10 pl-3">
             {item.children!.map((child) => (
-              <NavItemComponent key={child.href} item={child} depth={depth + 1} />
+              <Link
+                key={child.href}
+                href={child.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+                  pathname === child.href
+                    ? "bg-indigo-600/50 text-white"
+                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                )}
+              >
+                <span>{child.title}</span>
+              </Link>
             ))}
           </div>
         )}
@@ -81,12 +109,15 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-900 transition-all duration-300",
+        "fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-900 transition-all duration-300 overflow-hidden",
         isCollapsed ? "w-[72px]" : "w-[260px]"
       )}
     >
-      <div className="flex h-16 items-center gap-2 px-4 border-b border-white/10">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600">
+      <div className={cn(
+        "flex h-16 items-center gap-2 border-b border-white/10 shrink-0",
+        isCollapsed ? "justify-center px-2" : "px-4"
+      )}>
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 shrink-0">
           <Zap className="h-5 w-5 text-white" />
         </div>
         {!isCollapsed && (
@@ -97,13 +128,16 @@ export function Sidebar() {
         )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <nav className={cn(
+        "flex-1 overflow-y-auto py-4 space-y-1",
+        isCollapsed ? "px-2" : "px-3"
+      )}>
         {navigationItems.map((item) => (
-          <NavItemComponent key={item.href} item={item} />
+          <NavItemComponent key={item.href} item={item} collapsed={isCollapsed} />
         ))}
       </nav>
 
-      <div className="border-t border-white/10 p-4">
+      <div className="border-t border-white/10 p-4 shrink-0">
         {!isCollapsed && (
           <div className="text-xs text-slate-500">
             <p className="font-medium text-slate-400">Finmark.ai × Denave</p>
