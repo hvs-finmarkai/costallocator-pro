@@ -26,7 +26,7 @@ function NavItemComponent({ item, collapsed }: { item: NavItem; collapsed: boole
           "flex h-10 w-10 items-center justify-center rounded-lg mx-auto transition-colors",
           isActive
             ? "bg-indigo-600 text-white"
-            : "text-slate-300 hover:bg-white/10 hover:text-white"
+            : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
         )}
         title={item.title}
       >
@@ -44,7 +44,7 @@ function NavItemComponent({ item, collapsed }: { item: NavItem; collapsed: boole
             "flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
             isActive
               ? "bg-indigo-600 text-white"
-              : "text-slate-300 hover:bg-white/10 hover:text-white"
+              : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
           )}
         >
           <div className="flex items-center gap-3">
@@ -59,7 +59,7 @@ function NavItemComponent({ item, collapsed }: { item: NavItem; collapsed: boole
           />
         </button>
         {isOpen && (
-          <div className="mt-1 ml-4 space-y-1 border-l border-white/10 pl-3">
+          <div className="mt-1 ml-4 space-y-1 border-l border-slate-200 dark:border-white/10 pl-3">
             {item.children!.map((child) => (
               <Link
                 key={child.href}
@@ -67,8 +67,8 @@ function NavItemComponent({ item, collapsed }: { item: NavItem; collapsed: boole
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
                   pathname === child.href
-                    ? "bg-indigo-600/50 text-white"
-                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    ? "bg-indigo-600/10 text-indigo-600 dark:bg-indigo-600/50 dark:text-white font-medium"
+                    : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
                 )}
               >
                 <span>{child.title}</span>
@@ -87,7 +87,7 @@ function NavItemComponent({ item, collapsed }: { item: NavItem; collapsed: boole
         "flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
         isActive
           ? "bg-indigo-600 text-white"
-          : "text-slate-300 hover:bg-white/10 hover:text-white"
+          : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
       )}
     >
       <div className="flex items-center gap-3">
@@ -95,9 +95,9 @@ function NavItemComponent({ item, collapsed }: { item: NavItem; collapsed: boole
         <span>{item.title}</span>
       </div>
       {item.badge && (
-        <Badge variant="destructive" className="h-5 min-w-5 justify-center rounded-full px-1.5 text-xs">
+        <span className="h-5 min-w-5 flex items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] text-white font-medium">
           {item.badge}
-        </Badge>
+        </span>
       )}
     </Link>
   );
@@ -109,12 +109,13 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-900 transition-all duration-300 overflow-hidden",
+        "fixed inset-y-0 left-0 z-50 flex flex-col border-r transition-all duration-300 overflow-hidden",
+        "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800",
         isCollapsed ? "w-[72px]" : "w-[260px]"
       )}
     >
       <div className={cn(
-        "flex h-16 items-center gap-2 border-b border-white/10 shrink-0",
+        "flex h-16 items-center gap-2 border-b border-slate-200 dark:border-slate-800 shrink-0",
         isCollapsed ? "justify-center px-2" : "px-4"
       )}>
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 shrink-0">
@@ -122,8 +123,8 @@ export function Sidebar() {
         </div>
         {!isCollapsed && (
           <div>
-            <h1 className="text-sm font-bold text-white">Finmark.ai</h1>
-            <p className="text-xs text-slate-400">P&L AutoTrack Suite</p>
+            <h1 className="text-sm font-bold text-slate-900 dark:text-white">Finmark.ai</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">P&L AutoTrack Suite</p>
           </div>
         )}
       </div>
@@ -137,10 +138,10 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="border-t border-white/10 p-4 shrink-0">
+      <div className="border-t border-slate-200 dark:border-slate-800 p-4 shrink-0">
         {!isCollapsed && (
-          <div className="text-xs text-slate-500">
-            <p className="font-medium text-slate-400">Finmark.ai × Denave</p>
+          <div className="text-xs text-slate-400 dark:text-slate-500">
+            <p className="font-medium text-slate-500 dark:text-slate-400">Finmark.ai × Denave</p>
             <p>© 2025 All rights reserved</p>
           </div>
         )}
